@@ -4,26 +4,27 @@ namespace Deployer;
 require 'recipe/laravel.php';
 
 // Project name
-set('application', 'my_project');
+set('application', 'todo-laravel');
 
 // Project repository
-set('repository', 'git@domain.com:username/repository.git');
+set('repository', 'https://github.com/jetgamer16/todo-laravel.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
 set('git_tty', true); 
 
 // Shared files/dirs between deploys 
-add('shared_files', []);
-add('shared_dirs', []);
+add('shared_files', ['.env']);
+add('shared_dirs', ['storage','public']);
 
 // Writable dirs by web server 
-add('writable_dirs', []);
+add('writable_dirs', ['bootstrap/cache','storage']);
 
 
 // Hosts
 
-host('project.com')
-    ->set('deploy_path', '~/{{application}}');    
+host('172.16.221.122')->user('prod-ud4-deployer')
+    ->identityFile('~/.ssh/id_rsa')
+    ->set('deploy_path', '/var/www/prod-ud4-deployer/html/todo-laravel');    
     
 // Tasks
 
@@ -47,3 +48,5 @@ task('reload:php-fpm', function () {
 });
 # inclusió en el cicle de desplegament
 after('deploy', 'reload:php-fpm');
+
+
